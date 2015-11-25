@@ -38,7 +38,7 @@ public class Matchmaker {
     private Map<Integer, Integer> mapOfBadIndexes;
     private static final int MIN_RANGE = -1;
     private static final int MAX_RANGE = 1;
-    private static double EPSILON = 1.0/2000000.0;
+    private static double EPSILON = 1.0/5000000.0;
     private static final double THRESHOLD = 450000;
     private static double VARIANCE = 0.05;
     private static int REMOVE_INDEX = Math.min(2, (int)(VARIANCE*20));
@@ -46,8 +46,6 @@ public class Matchmaker {
     
     
     public Matchmaker(int numOfAttributes) {
-//	EPSILON = 1.0/epsilon;
-//	VARIANCE = variance;
 	this.numOfAttributes = numOfAttributes;
 	this.mapCandidateToResult = new HashMap<Candidate, Double>();
 	this.mapOfWeightAndSign = new HashMap<Integer, Boolean>();
@@ -56,7 +54,6 @@ public class Matchmaker {
 	this.mapOfBadIndexes = new HashMap<Integer, Integer>();
 	this.mapOfGoodIndexes = new HashMap<Integer, Double>();
 	this.mapOfPastModIndexes = new HashMap<Integer, Double>();
-//	System.out.println(EPSILON);
     }
     
     public Candidate driver() {
@@ -101,8 +98,6 @@ public class Matchmaker {
     }
     
     private Candidate generateIdealCandidate(double[] weights) {
-	System.out.println("Ideal");
-//	System.out.println(Arrays.toString(weights));
 	double[] attributes = new double[weights.length];
 	for (int i=0; i<weights.length; i++) {
 	    if (weights[i] > 0) {
@@ -123,7 +118,6 @@ public class Matchmaker {
 	double[] newAttributes = new double[weights.length];
 	for (int i=0; i < newAttributes.length; i++) {
 	    double diffPosAndNeg = Math.abs(this.positiveWeights[i] - this.negativeWeights[i]);
-//	    System.out.println("Difference " + diffPosAndNeg);
 	    if (diffPosAndNeg > THRESHOLD) {
 		newAttributes[i] = pastAttributes[i];
 	    } else {
@@ -170,7 +164,6 @@ public class Matchmaker {
     }
     
     private Candidate generateTestConsecutiveCandidate(double[] weights) {
-	System.out.println("Test");
 	double[] pastAttributes = this.previousCandidate.attributes;
 	double[] newAttributes = new double[weights.length];
 	int numOfChanges = (int)(this.numOfAttributes*VARIANCE);
@@ -261,11 +254,9 @@ public class Matchmaker {
 	    this.positiveWeights = new double[this.numOfAttributes];
 	    this.negativeWeights = new double[this.numOfAttributes];
 	}
-//	double[] weights = Person.createRandomWeights(this.numOfAttributes);
 	double[] weights = (this.bestWeights == null)? new double[this.numOfAttributes] : this.bestWeights;
 	double difference = 1;
 	double[] past = null;
-//	System.out.println("Gradient Descent started");
 	while (difference > EPSILON) {
 	    double[] gradientVector = new double[this.numOfAttributes];
 	    for (Entry<Candidate, Double> entry : map.entrySet()) {
@@ -302,8 +293,6 @@ public class Matchmaker {
 	for (int i=0; i<weights.length; i++) {
 	    weights[i] = getDoubleWith2Decimals(weights[i]);
 	}
-//	System.out.println("Count epsilon: " + count);
-//	System.out.println("Validated: " + Person.validateWeights(weights));
 	return weights;
     }
     
